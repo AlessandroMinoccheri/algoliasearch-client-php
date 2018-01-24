@@ -627,7 +627,7 @@ class Client
      * @return mixed
      * @throws AlgoliaException
      */
-    public function searchUserIDs($query, $clusterName = null, $page = null, $hitsPerPage = null)
+    public function searchUserIDs($query, $clusterName = null, $page = 0, $hitsPerPage = 20)
     {
         $requestHeaders = func_num_args() === 5 && is_array(func_get_arg(4)) ? func_get_arg(4) : array();
 
@@ -972,12 +972,12 @@ class Client
     /**
      * Send a batch request targeting multiple indices.
      *
-     * @param array $requests an associative array defining the batch request body
+     * @param array $operations an associative array defining the batch request body
      * @param array $requestHeaders
      *
      * @return mixed
      */
-    public function batch($requests)
+    public function batch($operations)
     {
         $requestHeaders = func_num_args() === 2 && is_array(func_get_arg(1)) ? func_get_arg(1) : array();
 
@@ -986,7 +986,7 @@ class Client
             'POST',
             '/1/indexes/*/batch',
             array(),
-            array('requests' => $requests),
+            array('requests' => $operations),
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
             $this->context->readTimeout,
