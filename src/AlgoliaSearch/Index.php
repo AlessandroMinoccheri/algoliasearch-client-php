@@ -1054,17 +1054,11 @@ class Index
     {
         $requestHeaders = func_num_args() === 3 && is_array(func_get_arg(2)) ? func_get_arg(2) : array();
 
-        $url = '/1/indexes/'.$this->urlIndexName.'/settings';
-
-        if ($forwardToReplicas) {
-            $url = $url.'?forwardToReplicas=true';
-        }
-
         return $this->client->request(
             $this->context,
             'PUT',
-            $url,
-            array(),
+            '/1/indexes/'.$this->urlIndexName.'/settings',
+            array('forwardToReplicas' => $forwardToReplicas),
             $settings,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1338,6 +1332,7 @@ class Index
      * @param int $maxHitsPerQuery
      * @return mixed
      * @deprecated use updateApiKey instead
+     * @throws AlgoliaException
      */
     public function updateUserKey($key, $obj, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0)
     {
@@ -1351,6 +1346,7 @@ class Index
      * @param array $requestHeaders pass custom header only for this request
      *
      * @return mixed
+     * @throws AlgoliaException
      */
     public function batch($operations)
     {
@@ -1405,12 +1401,13 @@ class Index
     }
 
     /**
-     * @param string     $query
+     * @param string $query
      * @param array|null $params
      * @param $cursor
-     * @param array      $requestHeaders
+     * @param array $requestHeaders
      *
      * @return mixed
+     * @throws AlgoliaException
      */
     public function browseFrom($query, $params = null, $cursor = null)
     {
@@ -1447,8 +1444,8 @@ class Index
     /**
      * @param $query
      * @param $synonymType
-     * @param null $page
-     * @param null $hitsPerPage
+     * @param int $page
+     * @param int $hitsPerPage
      *
      * @return mixed
      *
@@ -1529,8 +1526,8 @@ class Index
         return $this->client->request(
             $this->context,
             'DELETE',
-            '/1/indexes/'.$this->urlIndexName.'/synonyms/'.urlencode($objectID).'?forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/synonyms/'.urlencode($objectID),
+            array('forwardToReplicas' => $forwardToReplicas),
             null,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1553,8 +1550,8 @@ class Index
         return $this->client->request(
             $this->context,
             'POST',
-            '/1/indexes/'.$this->urlIndexName.'/synonyms/clear?forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/synonyms/clear',
+            array('forwardToReplicas' => $forwardToReplicas),
             null,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1579,9 +1576,11 @@ class Index
         return $this->client->request(
             $this->context,
             'POST',
-            '/1/indexes/'.$this->urlIndexName.'/synonyms/batch?replaceExistingSynonyms='.($replaceExistingSynonyms ? 'true' : 'false')
-                .'&forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/synonyms/batch',
+            array(
+                'replaceExistingSynonyms' => $replaceExistingSynonyms,
+                'forwardToReplicas' => $forwardToReplicas,
+            ),
             $objects,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1606,8 +1605,8 @@ class Index
         return $this->client->request(
             $this->context,
             'PUT',
-            '/1/indexes/'.$this->urlIndexName.'/synonyms/'.urlencode($objectID).'?forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/synonyms/'.urlencode($objectID),
+            array('forwardToReplicas' => $forwardToReplicas),
             $content,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1693,8 +1692,8 @@ class Index
         return $this->client->request(
             $this->context,
             'DELETE',
-            '/1/indexes/'.$this->urlIndexName.'/rules/'.urlencode($objectID).'?forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/rules/'.urlencode($objectID),
+            array('forwardToReplicas' => $forwardToReplicas),
             null,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1714,8 +1713,8 @@ class Index
         return $this->client->request(
             $this->context,
             'POST',
-            '/1/indexes/'.$this->urlIndexName.'/rules/clear?forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/rules/clear',
+            array('forwardToReplicas' => $forwardToReplicas),
             null,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1737,9 +1736,11 @@ class Index
         return $this->client->request(
             $this->context,
             'POST',
-            '/1/indexes/'.$this->urlIndexName.'/rules/batch?clearExistingRules='.($clearExistingRules ? 'true' : 'false')
-            .'&forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/rules/batch',
+            array(
+                'clearExistingRules' => $clearExistingRules,
+                'forwardToReplicas' => $forwardToReplicas,
+            ),
             $rules,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
@@ -1765,8 +1766,8 @@ class Index
         return $this->client->request(
             $this->context,
             'PUT',
-            '/1/indexes/'.$this->urlIndexName.'/rules/'.urlencode($objectID).'?forwardToReplicas='.($forwardToReplicas ? 'true' : 'false'),
-            null,
+            '/1/indexes/'.$this->urlIndexName.'/rules/'.urlencode($objectID),
+            array('forwardToReplicas' => $forwardToReplicas),
             $content,
             $this->context->writeHostsArray,
             $this->context->connectTimeout,
