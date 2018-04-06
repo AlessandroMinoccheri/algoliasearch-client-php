@@ -44,7 +44,11 @@ class Version
 
     public static function getUserAgent()
     {
-        $userAgent = self::$prefixUserAgentSegments.'Algolia for PHP ('.self::VALUE.')'.static::$suffixUserAgentSegments;
+        $userAgent =
+            self::$prefixUserAgentSegments .
+            'PHP ('.str_replace(PHP_EXTRA_VERSION, '', PHP_VERSION).'); ' .
+            'Algolia for PHP ('.self::VALUE.')' .
+            static::$suffixUserAgentSegments;
 
         // Keep backward compatibility
         $userAgent .= static::$custom_value;
